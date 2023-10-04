@@ -8,3 +8,8 @@
       end
     end
 
+### Конфигурация сети
+    Cоздаем сетевые интерфейсы на обеих ВМ:
+    vm1.vm.network "private_network", ip: "10.0.5.10"
+    vm2.vm.network "private_network", ip: "10.0.5.11"
+
