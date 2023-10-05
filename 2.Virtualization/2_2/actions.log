@@ -1,0 +1,19 @@
+vagrant init
+vi Vagrantfile
+vagrant up
+vagrant status
+vagrant ssh vm1
+....
+sudo systemctl status apache2
+ip a
+ping -c 4 10.0.5.11
+curl 10.0.5.11:80
+exit
+....
+vagrant ssh vm2
+....
+sudo systemctl status nginx
+ip a
+ping -c 4 10.0.5.10
+curl 10.0.5.10:80
+exit
