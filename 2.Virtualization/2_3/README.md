@@ -39,5 +39,8 @@
 <img width="826" alt="Снимок экрана 2023-10-05 в 18 07 23" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/8062a3e5-8f8c-4eac-8756-6a18e8bd7e22">
 
     Заходим на ВМ и проверяем все ли корректно настроилось - vagrant ssh
-    
+    curl localhost:80 - проверяем установлена ли служба веб-сервера
+    cat /home/vklimantovich/file.txt - проверяем создался ли файл с timestamp
+    cat /etc/cron.d/ansible_clear-tmpdir - проверка создалась ли cronjob
+<img width="432" alt="Снимок экрана 2023-10-05 в 18 14 06" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/af32245d-65da-44f2-87af-4b04bab79de8">
 
