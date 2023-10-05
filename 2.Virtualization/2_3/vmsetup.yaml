@@ -1,0 +1,36 @@
+---
+- name: Config VMs
+  hosts: virtual_machines
+
+  tasks:
+
+  - name: apt update & install nginx
+    ansible.builtin.apt:
+      name: nginx
+      state: present
+      update_cache: yes
+    become: yes
+
+  - name: Creating a file with content
+    ansible.builtin.copy:
+      dest: "~/file.txt"
+      content: '{{ ansible_date_time.iso8601 }}'
+
+  - name: Install additional packages
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+    - "ncat"
+    - "wget"
+    become: yes
+
+  - name: Create cron job - clear tmp dir every 6 hours
+    ansible.builtin.cron:
+      name: "clear tmp dir"
+      minute: "*"
+      hour: "6"
+      user: root
+      job: "rm -rf /tmp/*"
+      cron_file: ansible_clear-tmpdir
+    become: true
