@@ -31,3 +31,13 @@
 
 
 ### Настройка Ansible-плейбука
+
+    Создал .yaml файл плейбука, содержащий необходимые таски. Для вывода даты в файл использовал 
+    ansible fact ansible_date_time.iso8601, необходимые пакеты устанавливаю с помощью цикла with_items,
+    cron настроил на срабатывание каждые 6 часов.
+    Запуск плейбука -> ansible-playbook vmsetup.yaml
+<img width="826" alt="Снимок экрана 2023-10-05 в 18 07 23" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/8062a3e5-8f8c-4eac-8756-6a18e8bd7e22">
+
+    Заходим на ВМ и проверяем все ли корректно настроилось - vagrant ssh
+    
+
