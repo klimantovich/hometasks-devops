@@ -9,4 +9,4 @@ CREATE TABLE `employees`(
 --
 
 INSERT INTO `employees`(`name`)
-VALUES('JOHN', 'ADAM', 'JACK', 'USER');
+VALUES('JOHN');
