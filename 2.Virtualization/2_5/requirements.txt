@@ -1,0 +1,4 @@
+flask==2.0.1
+flask-mysql
+Werkzeug==2.2.2
+cryptography
