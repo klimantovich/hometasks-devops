@@ -79,6 +79,13 @@ fb4027c95955   vagrant_web    "flask run --host=0.…"   About a minute ago   Up
 <img width="545" alt="Снимок экрана 2023-10-06 в 16 31 07" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/52e262fd-e01b-457f-b3d8-c73494dede13">  
 
 # Трудности
+Проблемы с подключением приложения к mysql, получал ошибку 
+`pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'db' ([Errno 111] Connection refused)")`
+проблема была том, что flask пытался подключиться с БД на localhost, а нужно было подключатсья к контейнеру db,
+чтоб это сделать прописал env переменную `MYSQL_DATABASE_HOST=db`.  
+Далее была проблема с зависимостями (в репозитории не указано, какие версии flask/python использовались автором, и 
+изначально со свежими версиями не работало, пришлось указывать версию `flask==2.0.1` и использовать библиотеку `cryptography`
+
 
 
 
