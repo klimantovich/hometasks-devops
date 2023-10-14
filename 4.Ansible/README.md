@@ -32,16 +32,26 @@ backend habackend
 
 В плейбуке используется 5 ролей (apt, ntp, rsyslog-сервер, logstash, elasticsearch).  
 
-**Java** устанавливаем с помощью роли geerlingguy.java, в плейбуке в переменную java_packages указываем нужную версию джавы.  
+### Java  
+устанавливаем с помощью роли geerlingguy.java, в плейбуке в переменную java_packages указываем нужную версию джавы.  
 
-**Elasticsearch** устанавливаем с помощью одноименной роли, в таске "Configure Elasticsearch" копируем темплейт кофиг файла. Предварительно нужно  
+
+### Elasticsearch
+устанавливаем с помощью одноименной роли, в таске "Configure Elasticsearch" копируем темплейт кофиг файла. Предварительно нужно  
 переопределить если нужно переменные (defaults):  
 `elasticsearch_network_host: 0.0.0.0` - для возможности подключения к кластеру извне (по умолчанию стоит только с localhost)  
 `elasticsearch_discovery_type: single-node` - т.к. в задании используется кластер состоящий из 1-й ноды  
 `elasticsearch_http_port: 9200` - elasticsearch будет работать на стандартном порту 9200  
 
-**rsyslog-сервер** роль используется для настройки сервера rsyslog, на который будут отправляться логи rsyslog-демоном с машины webui, а затем rsyslog  
-будет отправлять логи уже в logstash. 
+Проверяем работоспособность elastiicsearch, зайдя на машину и попробовав подключиться по логину/паролю.  
+Предварительно пароль можно сбросить и получить новый командой `bin/elasticsearch-reset-password -u elastic` 
+
+<img width="450" alt="Снимок экрана 2023-10-14 в 21 46 33" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/741a44f2-c6e5-43b9-bc86-904a4b61e72a">
+
+
+### rsyslog-сервер
+роль используется для настройки сервера rsyslog, на который будут отправляться логи rsyslog-демоном с машины webui, 
+а затем rsyslog будет отправлять логи уже в logstash. 
 В темплейте конфига rsyslog.conf расскоментируются строки ниже, и по порту 514 будут ожидаться логи от remote rsyslog.
 ```
 # provides UDP syslog reception
@@ -52,6 +62,26 @@ input(type="imudp" port="514")
 module(load="imtcp")
 input(type="imtcp" port="514")
 ```
-В директорию /etc/rsyslog.d/ роль добавляет конфиг-файлы 01-json-template.conf для преобразования логов в json-формат, и файл 60-output.conf, в котором  
+В директорию /etc/rsyslog.d/ роль добавляет конфиг-файлы `01-json-template.conf` для преобразования логов в json-формат, и файл `60-output.conf`, в котором
 прописана пересылка логов в логстеш по порту 10514 (localhost).  
+
+
+### logstash
+С помощью переменной `logstash_monitor_local_syslog: false` отключаем сбор логов с локального syslog. Роль копирует фильтры (в директорию
+/etc/logstash/conf.d/):  
+01-beats-input.conf - настройки инпута, добавил input от rsyslog (по 10514 порту, который настроил в роли rsyslog-server)
+30-elasticsearch-output.conf - настройки аутпута:
+```
+output {
+  elasticsearch {
+    hosts => {{ logstash_elasticsearch_hosts | to_json }}    # В нашем случае - локалхост
+    index => "rsyslog-%{+YYYY.MM.dd}"                        # Логи будут попадать в индекс с таким названием
+    user => "logstash"                                       # Тут использую пользователя/пароль, которого создал вручную (см. ab-webui)
+    password => "nfdje44FuaneYF"
+  }
+}
+```
+Теперь логи с rsyslog должны попадать в logstash в json-формате, а затем попадать в эластик в индекс rsyslog-*
+
+# ab-webui
 
