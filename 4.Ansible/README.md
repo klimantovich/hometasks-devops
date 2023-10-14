@@ -127,7 +127,7 @@ server {
 <img width="1165" alt="Снимок экрана 2023-10-14 в 22 40 35" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/694fef4a-ce13-45cb-8460-6955ba02fa8d">  
 
 ### Проверка логов:
-<img width="809" alt="Снимок экрана 2023-10-14 в 22 36 02" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/b09696a4-d21d-46ed-a7e2-a86e0138ba0a">  
+<img width="809" alt="Снимок экрана 2023-10-14 в 22 36 02" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/b09696a4-d21d-46ed-a7e2-a86e0138ba0a">   
 Как видим, логи идут с хоста webui, как и требовалось, и type: rsyslog.
 
 ### Общая конфигурация
