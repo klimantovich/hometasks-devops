@@ -1,12 +1,12 @@
 # Репозитории:
 ab-haproxy -> https://github.com/klimantovich/ab-haproxy  
 ab-logstash ->  https://github.com/klimantovich/ab-logstash  
-ab-webui ->  
+ab-webui ->  https://github.com/klimantovich/ab-webui
 
 # Хосты
 10.0.5.10 -  LOGSTASH (rsyslog-сервер, logstash и elasticsearch)  
 10.0.5.12 -  HAPROXY (прокси/load balancer для kibana)  
-10.0.5.13 -  
+10.0.5.13 -  WEBUI (UI для elasticsearch - kibana, nginx как реверс-прокси для kibana)
 
 # ab-haproxy
 [Ссылка на репозиторий](https://github.com/klimantovich/ab-haproxy)  
@@ -84,4 +84,55 @@ output {
 Теперь логи с rsyslog должны попадать в logstash в json-формате, а затем попадать в эластик в индекс rsyslog-*
 
 # ab-webui
+[Ссылка на репозиторий](https://github.com/klimantovich/ab-webui)  
+
+В плейбуке используется 5 ролей (apt, ntp, rsyslog-client, kibana, nginx).  
+
+### Rsyslog-client  
+Роль - копия роли rsyslog для ab-logstash, но в данном случае строки `provides TCP/UDP syslog reception` закомментированы, а в 50-default.conf
+добавлена строка `*.*							@{{ rsyslog_server_ip }}:514` для пересылки всех логов на удаленный хост на 514 порт.  
+
+### Kibana
+Для того, чтоб файл из темплейта с конфигурацией kibana был создан с правильными настройками, задаем переменные  
+`kibana_elasticsearch_url`: "http://10.0.5.10:9200" -> по умолчанию localhost  
+`kibana_elasticsearch_username` и `kibana_elasticsearch_password` используем pre-defined пользователя kibana_system и задаем для него пароль
+также, как до этого задавали пароль пользователю elastic.  
+
+### Nginx
+Настраиваем nginx как реверс-прокси для kibana, для этого с помощью переменной `nginx_kibana_address` задаем url кибаны и настраиваем на него proxy-pass.
+Роль создает новый vhost со следующими настройками:  
+```
+server {
+        listen 80 default_server;
+        root /var/www/html;
+        server_name _;
+        location / {
+                proxy_pass {{ nginx_kibana_address }};
+        }
+}
+```
+
+# Настройка и проверка ELK-стека
+
+Предварительно через фаерволл закрыл на хосте webui на порты 5601 и 80 (разрешил только на 80 порт извне с ip haproxy), чтоб зайти на UI kibana можно 
+было только по ip 10.0.5.12 (haproxy).  
+### Веб-интерфейс:  
+<img width="795" alt="Снимок экрана 2023-10-14 в 22 28 09" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/662a1791-3611-4805-88b0-f7f5e3cf7a59">  
+
+### Создаем index-pattern (для отображения в discovery:  
+<img width="1217" alt="Снимок экрана 2023-10-14 в 22 29 59" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/b0e14747-4996-4e64-a7e1-7df213b32081">  
+
+### Проверка индекса:
+<img width="1622" alt="Снимок экрана 2023-10-14 в 22 33 51" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/58bada44-6f3e-4b6c-a481-5a430d5d9c79">
+
+### Проверка логов:
+<img width="809" alt="Снимок экрана 2023-10-14 в 22 36 02" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/b09696a4-d21d-46ed-a7e2-a86e0138ba0a">  
+Как видим, логи идут с хоста webui, как и требовалось, и type: rsyslog.
+
+### Общая конфигурация
+В итоге конфигурация elk-стека выглядит следующим образом:  
+HAPROXY перенаправляет на свой backend (nginx), который в свою очередь перенаправляет на ui кибана. Напрямую nginx & kibana закрыты фаерволом, и зайти на них
+кроме как через haproxy нельзя.
+
+
 
