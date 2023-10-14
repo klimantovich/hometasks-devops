@@ -123,7 +123,8 @@ server {
 <img width="1217" alt="Снимок экрана 2023-10-14 в 22 29 59" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/b0e14747-4996-4e64-a7e1-7df213b32081">  
 
 ### Проверка индекса:
-<img width="1622" alt="Снимок экрана 2023-10-14 в 22 33 51" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/58bada44-6f3e-4b6c-a481-5a430d5d9c79">
+<img width="1622" alt="Снимок экрана 2023-10-14 в 22 33 51" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/58bada44-6f3e-4b6c-a481-5a430d5d9c79">  
+<img width="1165" alt="Снимок экрана 2023-10-14 в 22 40 35" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/694fef4a-ce13-45cb-8460-6955ba02fa8d">  
 
 ### Проверка логов:
 <img width="809" alt="Снимок экрана 2023-10-14 в 22 36 02" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/b09696a4-d21d-46ed-a7e2-a86e0138ba0a">  
