@@ -1,9 +1,57 @@
 # Репозитории:
 ab-haproxy -> https://github.com/klimantovich/ab-haproxy  
-ab-logstash ->  
+ab-logstash ->  https://github.com/klimantovich/ab-logstash  
 ab-webui ->  
 
 # Хосты
-10.0.5.10 -  
-10.0.5.12 -  HAPROXY (прокси/load balancer для kibana)
+10.0.5.10 -  LOGSTASH (rsyslog-сервер, logstash и elasticsearch)  
+10.0.5.12 -  HAPROXY (прокси/load balancer для kibana)  
 10.0.5.13 -  
+
+# ab-haproxy
+[Ссылка на репозиторий](https://github.com/klimantovich/ab-haproxy)  
+В плейбуке определено 3 роли (apt, ntp, haproxy).  
+Прописываем ip кибаны (webui) в переменную kibana_node_ip: 10.0.5.13, которая будет использована при создании бэкенда в темплейте конфигурации.  
+Итого конфигурация файла `/etc/haproxy/haproxy.conf` содержит 1 backend, который перенаправляет на хост с kibana:  
+```
+...
+frontend hafrontend
+    bind *:80
+    mode http
+    default_backend habackend
+
+backend habackend
+    mode http
+    balance roundrobin
+    option forwardfor
+    server node1 10.0.5.13:80 check
+```
+
+# ab-logstash
+[Ссылка на репозиторий](https://github.com/klimantovich/ab-logstash)  
+
+В плейбуке используется 5 ролей (apt, ntp, rsyslog-сервер, logstash, elasticsearch).  
+
+**Java** устанавливаем с помощью роли geerlingguy.java, в плейбуке в переменную java_packages указываем нужную версию джавы.  
+
+**Elasticsearch** устанавливаем с помощью одноименной роли, в таске "Configure Elasticsearch" копируем темплейт кофиг файла. Предварительно нужно  
+переопределить если нужно переменные (defaults):  
+`elasticsearch_network_host: 0.0.0.0` - для возможности подключения к кластеру извне (по умолчанию стоит только с localhost)  
+`elasticsearch_discovery_type: single-node` - т.к. в задании используется кластер состоящий из 1-й ноды  
+`elasticsearch_http_port: 9200` - elasticsearch будет работать на стандартном порту 9200  
+
+**rsyslog-сервер** роль используется для настройки сервера rsyslog, на который будут отправляться логи rsyslog-демоном с машины webui, а затем rsyslog  
+будет отправлять логи уже в logstash. 
+В темплейте конфига rsyslog.conf расскоментируются строки ниже, и по порту 514 будут ожидаться логи от remote rsyslog.
+```
+# provides UDP syslog reception
+module(load="imudp")
+input(type="imudp" port="514")
+
+# provides TCP syslog reception
+module(load="imtcp")
+input(type="imtcp" port="514")
+```
+В директорию /etc/rsyslog.d/ роль добавляет конфиг-файлы 01-json-template.conf для преобразования логов в json-формат, и файл 60-output.conf, в котором  
+прописана пересылка логов в логстеш по порту 10514 (localhost).  
+
