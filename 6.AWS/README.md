@@ -74,12 +74,12 @@
 7. Закрываем порты 80/443 EC2 инстансов c веб-сервером для всех, кроме Load Balancer'a. Для этого редактирую Security Group `web-sg`, в ней меняю Inbound rules (для HTTP/HTTPS выбираю source, который может по ним подключаться, секьюрити группу для load балансера `elb-sb`:
    <img width="1346" alt="Снимок экрана 2023-10-17 в 18 04 32" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/1802c4c3-785b-4435-aca5-935af7f84bf7">
 
-8. Проверка работоспособности. Проверяю, что по ip инстансов nginx index.html не открыввается (т.к. теперь 80 порт закрыт для всех, кроме лоад балансера)
-   <img width="684" alt="Снимок экрана 2023-10-17 в 18 15 51" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/f69194aa-8a2c-4b96-8b95-54e9ca28f08e">
+8. Проверка работоспособности. Проверяю, что по ip инстансов nginx index.html не открыввается (т.к. теперь 80 порт закрыт для всех, кроме лоад балансера)  
+   <img width="684" alt="Снимок экрана 2023-10-17 в 18 15 51" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/f69194aa-8a2c-4b96-8b95-54e9ca28f08e">  
    Останавливаем один из инстансов:  
-   <img width="761" alt="Снимок экрана 2023-10-17 в 18 18 42" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/68a7d477-5244-40e4-8b46-ba4f6b0338e1">
+   <img width="761" alt="Снимок экрана 2023-10-17 в 18 18 42" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/68a7d477-5244-40e4-8b46-ba4f6b0338e1">  
    Проверка работоспособности сейчас. При недоступности одного из инстансов, веб-сайт все равно работает.
-  <img width="769" alt="Снимок экрана 2023-10-17 в 18 21 52" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/fbae580c-f8fc-4897-81fa-3d4f84cd5e73">
+   <img width="769" alt="Снимок экрана 2023-10-17 в 18 21 52" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/fbae580c-f8fc-4897-81fa-3d4f84cd5e73">
 
 
 
