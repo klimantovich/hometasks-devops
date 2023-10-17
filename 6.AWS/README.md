@@ -53,7 +53,21 @@
    <img width="957" alt="Снимок экрана 2023-10-17 в 13 56 30" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/1e39c315-9b50-4183-86b9-99096aae9ab7">
    Оба инстанса видят друг друга в сети, ping по private-ip адресу доходит. В то же время при смене ip (например включении vpn), веб-сервер не открывается и по ssh доступа на машину нет
 
-5. 
+5. Создаю Target Group `hw-targetgroup`:
+   - Target type: `Instances`
+   - Port: `80`
+   - VPC: `hw-vpc`
+   - Health check protocol: `HTTP`, path: `/`
+   - Interval: `5 seconds`
+   - Sucess codes: `200-399`
+   Выбираю в aviable targets EC2 web-01 и web-02:
+  <img width="1065" alt="Снимок экрана 2023-10-17 в 14 14 57" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/372e1e0c-526a-4b5e-a51a-79ea22b0722f">
+
+6. Создаю Load Balancer:
+
+
+
+  
 
 
 
