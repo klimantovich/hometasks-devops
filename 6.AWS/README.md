@@ -1,15 +1,35 @@
 # PART 1
 -----
-# Создание VPC и подсетей
+## Создание VPC и подсетей
+
 **VPC Resource map:**  
-<img width="1063" alt="Снимок экрана 2023-10-16 в 19 02 10" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/daa84572-3291-420a-8b39-54a0054f8b31">
+<img width="1122" alt="Снимок экрана 2023-10-17 в 12 44 27" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/f58caaa2-a512-4f5b-b8fc-f27ff9d4581e">
+
 1. Создал VPC `hw-vpc`:
   - CIDR: 10.5.0.0/16
   - Region: Stocholm (eu-north-1)
-В нем создал 3 VPC:
+
 2. В VPC воздал 3 подсети:
   - `hw-eu-north-1a-public-01` - CIDR 10.5.0.0/20, зона доступности eu-north-1a, публичная подсеть
   - `hw-eu-north-1a-private-01` - CIDR 10.5.32.0/20, зона eu-north-1a, приватная подсеть
   - `hw-eu-north-1b-public-02` - CIDR 10.5.16.0/20, зона eu-north-1b, публичная подсеть
 <img width="1186" alt="Снимок экрана 2023-10-16 в 19 13 11" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/dc7941e5-ad0f-4769-89c2-71f9b7896712">
+
 3. Создал 2 таблицы марштутизации для публичных и приватных подсетей
+  - `hw-public-rt` - таблица для публичных сетей, весь трафик в другие сети направляем на gateway igw-046702b973d9fd443
+<img width="872" alt="Снимок экрана 2023-10-17 в 12 49 27" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/9f2152b8-fa4c-42a7-a99e-a75fbbd513ec">
+
+  - `hw-private-rt` - таблица для приватной сети, весь трафик в другие сети направляем направляем на NAT gateway
+<img width="872" alt="Снимок экрана 2023-10-17 в 12 53 40" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/aaa85de2-24f9-45f8-a39b-e3e18c01238d">  
+
+4. Создал 2 Network ACLs (для публичных и приватных подсетей). Для приватных подсетей запретил весь входящий трафик не из диапазона моей VPC.
+<img width="1156" alt="Снимок экрана 2023-10-17 в 12 58 22" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/b0864ff7-17d4-4810-88bf-d75239a6cecd">
+
+5. Создал 2 Security group (web-sg и db-sg). Для SG web-sg задал входящие правила: разрешил HTTP, HTTPS и SSH подключения с моего локального ip-адреса, и все подключения из моей VPC  
+    <img width="604" alt="Снимок экрана 2023-10-17 в 13 01 30" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/458c6513-dc2a-42a4-b15f-5b627fc88c37">
+
+## Создание EC2 инстансов и ELB
+
+
+
+
