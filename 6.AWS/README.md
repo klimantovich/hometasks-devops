@@ -30,6 +30,31 @@
 
 ## Создание EC2 инстансов и ELB
 
+1. Генерирую RSA keypair:  
+    <img width="598" alt="7" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/1a760dec-9505-43a3-a7ab-dcd6b2c065bf">
+  
+3. Запускаю инстансы (Launch instances) EC2 web-01 и web-02:
+   - Image: `Amazon Linux`
+   - Instance type: `t3.micro`
+   - KeyPair Name: `vitali.keypair`
+   - VPC: `hw-vpc`
+   - Subnets: web-01 - `hw-eu-north-1a-public-01`, web-02 - `hw-eu-north-1b-public-02` # Создаем в разных available zones
+   - Security Group: `web-sg`
+<img width="1227" alt="Снимок экрана 2023-10-17 в 13 37 15" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/772740f6-7e8b-4017-b7bb-92b70563bacc">
+
+4. Подключаюсь к инстансам и настраиваю nginx:
+   ```
+   ssh -i .ssh/vitali_keypair.pem ec2-user@ec2_ip_address
+   sudo yum install nginx
+   sudo systemctl enable nginx
+   sudo systemctl start nginx
+   ```
+   Проверяю что по ip инстанса открывается веб-сервер:  
+   <img width="957" alt="Снимок экрана 2023-10-17 в 13 56 30" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/1e39c315-9b50-4183-86b9-99096aae9ab7">
+   Оба инстанса видят друг друга в сети, ping по private-ip адресу доходит. В то же время при смене ip (например включении vpn), веб-сервер не открывается и по ssh доступа на машину нет
+
+5. 
+
 
 
 
