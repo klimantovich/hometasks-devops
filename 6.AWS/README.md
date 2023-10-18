@@ -86,7 +86,29 @@
 1. Так как для создания инстанса RDS нужно создать Subnet Group, включающий в себя 2 приватные сети в двух разных AZ, создал еще одну private subnet `hw-eu-north-1b-private-02` в AZ eu-north-1b. Добавил ее в таблицу маршрутизации `hw-private-rt` (как и у второй приватной сети). Теперь карта vpc выглядит так:
    <img width="1046" alt="Снимок экрана 2023-10-18 в 10 51 41" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/a19f79fa-217b-4e53-8c07-53254e92d93d">
 
-2. Создал Subnet Group
+2. Создал Subnet Group `hw-subnet-group-private`
+   <img width="1107" alt="Снимок экрана 2023-10-18 в 10 54 41" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/0e875ead-ef7c-43b2-a833-b9690fcc7dfd">
+
+3. Создал PDS инстанс со следующими параметрами:
+   - Engine type: `PostgreSQL`
+   - DB instance identifier: `hw-database-1`
+   - DB instance class: `db.t3.micro`
+   - Storage type: `General Purpose SSD (gp2)`, Allocated Size: `20 Gb`
+   - VPC: `hw-vpc`, Subnet Group: `hw-subnet-group-private`, Public access: `no`
+   - Security Group: `db-sg`
+   <img width="942" alt="Снимок экрана 2023-10-18 в 11 02 39" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/df536e44-3c70-4ad4-aab1-0cf5a3e481ae">
+
+4. Для Security Group `db-sg` создал входящее правило, разрешающее подключение по 5432 порту только для инстансов из секьюрити группы `web-sg`:
+   <img width="1347" alt="Снимок экрана 2023-10-18 в 11 04 49" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/88e059dd-6fd9-4190-b105-7e6fce942580">
+
+5. Проверка подключения к RDS postgreSQL с EC2 из web-sg группы:  
+   Захожу на EC2 инстансы, Подключаюсь к удаленному postgres командой `psql -U postgres -p 5432 -h hw-database-1.cqju7juoavvm.eu-north-1.rds.amazonaws.com`. Мастер пароль использую тот, который указал на этапе создания RDS инстанса, hostname так же указываю хостнейм RDS инстанса.
+   Подключение c инстанса web-01:  
+  <img width="786" alt="Снимок экрана 2023-10-18 в 11 41 38" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/fca4e0bf-f239-4750-9115-21401e6e3342">
+  Подключение c инстанса web-02:  
+  <img width="786" alt="Снимок экрана 2023-10-18 в 11 43 53" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/8e9f53c2-68cc-46a2-8c4c-954dcb66a6da">
+
+
 
 
 
