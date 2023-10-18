@@ -102,14 +102,31 @@
    <img width="1347" alt="Снимок экрана 2023-10-18 в 11 04 49" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/88e059dd-6fd9-4190-b105-7e6fce942580">
 
 5. Проверка подключения к RDS postgreSQL с EC2 из web-sg группы:  
-   Захожу на EC2 инстансы, Подключаюсь к удаленному postgres командой `psql -U postgres -p 5432 -h hw-database-1.cqju7juoavvm.eu-north-1.rds.amazonaws.com`. Мастер пароль использую тот, который указал на этапе создания RDS инстанса, hostname так же указываю хостнейм RDS инстанса.
-   Подключение c инстанса web-01:  
-  <img width="786" alt="Снимок экрана 2023-10-18 в 11 41 38" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/fca4e0bf-f239-4750-9115-21401e6e3342">
-  Подключение c инстанса web-02:  
-  <img width="786" alt="Снимок экрана 2023-10-18 в 11 43 53" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/8e9f53c2-68cc-46a2-8c4c-954dcb66a6da">
+   Захожу на EC2 инстансы, Подключаюсь к удаленному postgres командой `psql -U postgres -p 5432 -h hw-database-1.cqju7juoavvm.eu-north-1.rds.amazonaws.com`. Мастер пароль использую тот, который указал на этапе создания RDS инстанса, hostname так же указываю хостнейм RDS инстанса.  
+   *Подключение c инстанса web-01:*  
+    <img width="786" alt="Снимок экрана 2023-10-18 в 11 41 38" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/fca4e0bf-f239-4750-9115-21401e6e3342">
 
+    *Подключение c инстанса web-02:*   
+    <img width="786" alt="Снимок экрана 2023-10-18 в 11 43 53" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/8e9f53c2-68cc-46a2-8c4c-954dcb66a6da">
 
+## Создание инстансов ElastiCache
 
+1. Создал 2 новых Security Groups, `cache-sg` (c inbound rule открытым портом 6582) для redis и `memcached-sg` (c inbound rule открытым портом 11211) для memcached. Подключение к инстансам будет доступно только из SG `web-sg`
+  <img width="1157" alt="Снимок экрана 2023-10-18 в 12 43 37" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/9c0e015d-e85c-4de8-a087-85c2ff5c64a8">
+
+2. Создал инстанс ElastiCache Redis `hw-redis-01` с параметрами:
+   - Cluster mode: `Disabled`
+   - Port: `6582`
+   - Node type: `cache.t3.micro`
+   - Subnet Group `hw-subnet-gr-01` (c одной подсетью в eu-north-1a)
+   - Security Group: `cache-sg`
+   <img width="1305" alt="Снимок экрана 2023-10-18 в 12 53 43" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/e92a17b4-2034-43da-aa12-a79fe38c01ea">
+
+3. Проверка подключения к redis с обоих инстансов EC2 (входящих в web-sg секьюрити группу). Предварительно установил redis-cli:  
+   `redis-cli -c -h hw-redis-01-ro.ypbapl.ng.0001.eun1.cache.amazonaws.com -p 6581`
+   <img width="859" alt="Снимок экрана 2023-10-18 в 12 57 07" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/01b51f7c-2877-4e9c-903e-244c23ad4a1b">
+
+4. Создал инстанс ElastiCache Memcached `hw-memcached-01` с параметрами: 
 
 
 
