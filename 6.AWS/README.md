@@ -81,6 +81,14 @@
    Проверка работоспособности сейчас. При недоступности одного из инстансов, веб-сайт все равно работает.
    <img width="769" alt="Снимок экрана 2023-10-17 в 18 21 52" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/fbae580c-f8fc-4897-81fa-3d4f84cd5e73">
 
+## Создание инстанса RDS
+
+1. Так как для создания инстанса RDS нужно создать Subnet Group, включающий в себя 2 приватные сети в двух разных AZ, создал еще одну private subnet `hw-eu-north-1b-private-02` в AZ eu-north-1b. Добавил ее в таблицу маршрутизации `hw-private-rt` (как и у второй приватной сети). Теперь карта vpc выглядит так:
+   <img width="1046" alt="Снимок экрана 2023-10-18 в 10 51 41" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/a19f79fa-217b-4e53-8c07-53254e92d93d">
+
+2. Создал Subnet Group
+
+
 
 
 
