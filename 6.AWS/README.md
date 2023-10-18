@@ -139,8 +139,13 @@
    <img width="643" alt="Снимок экрана 2023-10-18 в 13 08 42" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/839ca56e-b937-4c60-bd1d-e30ad08ab4a6">
 
 
+### Cloud Formation & S3 Bucket
 
-
+2. Создал S3 Bucket `hw-bucket-01` со следующими параметрами:
+   - Region: `eu-north-01`
+   - Object Ownership: `ACLs disabled`
+   - Bucket Versioning: `Disable`
+  
   
 
 
