@@ -146,6 +146,13 @@
    - Object Ownership: `ACLs disabled`
    - Bucket Versioning: `Disable`
   
+3. Сгенерировал 100 файлов по 256 Kb:  
+   `mkfile -n 256k ./shared/file{2..10}`
+   И заполнил ими бакет S3:
+   `aws s3 sync ./shared s3://hw-bucket-01`  
+   <img width="1399" alt="Снимок экрана 2023-10-18 в 21 42 32" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/5b11722d-86e8-4082-a667-38f3011021ff">
+
+  
   
 
 
