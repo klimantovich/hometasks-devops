@@ -118,7 +118,7 @@
    - Cluster mode: `Disabled`
    - Port: `6582`
    - Node type: `cache.t3.micro`
-   - Subnet Group `hw-subnet-gr-01` (c одной подсетью в eu-north-1a)
+   - Subnet Group `hw-subnet-gr-01` (приватная c одной подсетью в eu-north-1a)
    - Security Group: `cache-sg`
    <img width="1305" alt="Снимок экрана 2023-10-18 в 12 53 43" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/e92a17b4-2034-43da-aa12-a79fe38c01ea">
 
@@ -126,8 +126,17 @@
    `redis-cli -c -h hw-redis-01-ro.ypbapl.ng.0001.eun1.cache.amazonaws.com -p 6581`
    <img width="859" alt="Снимок экрана 2023-10-18 в 12 57 07" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/01b51f7c-2877-4e9c-903e-244c23ad4a1b">
 
-4. Создал инстанс ElastiCache Memcached `hw-memcached-01` с параметрами: 
+4. Создал инстанс ElastiCache Memcached `hw-memcached` с параметрами: 
+   - Cluster mode: `Disabled`
+   - Port: `11211`
+   - Number of nodes: `1`
+   - Node type: `cache.t3.micro`
+   - Subnet Group `hw-subnet-gr-02` (приватная c одной подсетью в eu-north-1b)
+   - Security Group: `memcached-sg` # c открытым 11211 портом для подключений web-sg инстансов
 
+5. Проверка подключения к эндпоинту memcached с обоих инстансов EC2 (входящих в web-sg секьюрити группу):
+   `telnet hw-memcached.ypbapl.cfg.eun1.cache.amazonaws.com 11211`  
+   <img width="643" alt="Снимок экрана 2023-10-18 в 13 08 42" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/839ca56e-b937-4c60-bd1d-e30ad08ab4a6">
 
 
 
