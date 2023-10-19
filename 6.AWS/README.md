@@ -152,6 +152,9 @@
    `aws s3 sync ./shared s3://hw-bucket-01`  
    <img width="1399" alt="Снимок экрана 2023-10-18 в 21 42 32" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/5b11722d-86e8-4082-a667-38f3011021ff">
 
+4. Установил lifecycle policy: через 30 дней отправляем в Glacier, через 180 - удаляем:  
+   <img width="800" alt="Снимок экрана 2023-10-19 в 19 26 19" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/d2be94f2-56fb-4de0-af80-21f95a9a3935">
+
   
   
 
