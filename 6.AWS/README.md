@@ -141,18 +141,21 @@
 
 ### Cloud Formation & S3 Bucket
 
-2. Создал S3 Bucket `hw-bucket-01` со следующими параметрами:
+1. Создал Cloud Front Destribution с параметрами по умолчанию (для elasic load balancer `hw-elb`)
+   <img width="1197" alt="Снимок экрана 2023-10-19 в 19 28 08" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/fe24cb27-e586-4ef8-98b8-613d99b86c12">
+
+3. Создал S3 Bucket `hw-bucket-01` со следующими параметрами:
    - Region: `eu-north-01`
    - Object Ownership: `ACLs disabled`
    - Bucket Versioning: `Disable`
   
-3. Сгенерировал 100 файлов по 256 Kb:  
+4. Сгенерировал 100 файлов по 256 Kb:  
    `mkfile -n 256k ./shared/file{2..10}`
    И заполнил ими бакет S3:  
    `aws s3 sync ./shared s3://hw-bucket-01`  
    <img width="1399" alt="Снимок экрана 2023-10-18 в 21 42 32" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/5b11722d-86e8-4082-a667-38f3011021ff">
 
-4. Установил lifecycle policy: через 30 дней отправляем в Glacier, через 180 - удаляем:  
+5. Установил lifecycle policy: через 30 дней отправляем в Glacier, через 180 - удаляем:  
    <img width="800" alt="Снимок экрана 2023-10-19 в 19 26 19" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/d2be94f2-56fb-4de0-af80-21f95a9a3935">
 
   
