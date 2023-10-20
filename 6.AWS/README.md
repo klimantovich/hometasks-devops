@@ -158,6 +158,26 @@
 5. Установил lifecycle policy: через 30 дней отправляем в Glacier, через 180 - удаляем:  
    <img width="800" alt="Снимок экрана 2023-10-19 в 19 26 19" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/d2be94f2-56fb-4de0-af80-21f95a9a3935">
 
+### Замена инстансов на autoscaling group
+
+1. Создал Launch Template `hw-webserver-template` с параметрами:
+   - Image: `Amazon Linux`
+   - Instance type: `t3.micro`
+   - KeyPair Name: `vitali.keypair`
+   - VPC: `hw-vpc`
+   - Security Group: `web-sg`
+   - User Data:
+       ```
+       #!/bin/bash
+      yum install -y nginx
+      systemctl enable nginx
+      systemctl start nginx
+       ```
+    При запуске нового инстанса будет запускаться скрипт, который установит и запустит nginx.
+
+2. Создал Autoscaling Group `hw-scaling-gr`:
+   - Template: `hw-webserver-template`
+
   
   
 
