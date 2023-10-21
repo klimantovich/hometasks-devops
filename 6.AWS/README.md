@@ -177,6 +177,24 @@
 
 2. Создал Autoscaling Group `hw-scaling-gr`:
    - Template: `hw-webserver-template`
+   - VPC: `hw-vpc`
+   - Availability Zones and subnets: `hw-eu-north-1a-public-01` и `hw-eu-north-1b-public-02`
+   - Load balancing: Attach to an existing load balancer `hw-targetgroup`
+   - Minimum capacity - `1`, Maximum capacity - `4`
+   - Target Tracking Policy: `Average CPU Utilization 70%`
+   - Dynamic Scaling Policies: создал 2 политики:
+     <img width="1466" alt="Снимок экрана 2023-10-21 в 11 24 01" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/027e76f0-61c3-4f87-a284-c866a7088c53">
+
+3. Проверка работы. Нагрузил cpu на пока единственнм инстансе `stress --timeout 300s`.
+   <img width="309" alt="Снимок экрана 2023-10-21 в 11 37 36" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/9c04a6cf-3f65-4f93-8615-8c6711a1f444">  
+   Проверяю что поднялся новый инстанс:  
+   <img width="1150" alt="Снимок экрана 2023-10-21 в 11 37 58" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/839c8338-0edd-4d5d-9936-144fdca6440e">
+
+-----
+# PART 2
+-----
+
+     
 
   
   
