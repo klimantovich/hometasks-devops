@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build project') {
+            agent {
+                docker { image 'golang:1.16' }
+            }
+            stages {
+                stage('Git clone') {
+                    steps {
+                        git branch: '$GIT_BRANCH', url: 'https://github.com/klimantovich/word-cloud-generator'
+                    }
+                }
+                stage('Go build') {
+                    steps {
+                        sh '''
+                            GOCACHE="$WORKSPACE/.gocache" GOOS=linux GOARCH=amd64 go build -o ./artifacts/word-cloud-generator-$BUILD_NUMBER
+                            gzip ./artifacts/word-cloud-generator-$BUILD_NUMBER
+                            '''
+                        stash includes: 'artifacts/**', name: 'app'
+                        }
+                    }
+                }
+        }
+        stage('Deploy Staging') {
+            stages {
+                stage('Make backup') {
+                    steps {
+                        unstash 'app'
+                        sshagent(credentials : ['dev_server_credentials']) {
+                            sh 'ssh jenkins@$SERVER_IP cp /home/jenkins/word-cloud-generator /home/jenkins/word-cloud-generator.backup'
+                            sh 'ssh jenkins@$SERVER_IP gzip -f /home/jenkins/word-cloud-generator.backup'
+                        }
+                    }
+                }
+                stage('Deploy application') {
+                    steps {
+                        sshagent(credentials : ['dev_server_credentials']) {
+                            sh 'ssh jenkins@$SERVER_IP sudo systemctl stop wordcloud.service'
+                            sh 'scp ./artifacts/word-cloud-generator-$BUILD_NUMBER.gz jenkins@$SERVER_IP:/home/jenkins/word-cloud-generator.gz'
+                            sh 'ssh jenkins@$SERVER_IP gunzip -f -q /home/jenkins/word-cloud-generator.gz'
+                            sh 'ssh jenkins@$SERVER_IP sudo systemctl start wordcloud.service'
+                        }
+                    }
+                }
+            }   
+        }
+        stage('Test build') {
+            steps {
+                sh 'curl $SERVER_IP:8888'
+            }
+        }       
+
+    }
+}
