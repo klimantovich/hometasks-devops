@@ -40,7 +40,6 @@ variable "public_key_path" {
   default = "/Users/vklimantovich/.ssh/id_rsa.pub"
 }
 
-#Variable Declaration
 variable "key_pair_name" {
   type    = string
   default = "vitaly_keypair"
