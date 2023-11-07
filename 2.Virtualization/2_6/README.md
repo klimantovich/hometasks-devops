@@ -22,3 +22,15 @@ To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 ```
 
 # Создание и запуск пода
+Используемый image приложения: https://hub.docker.com/repository/docker/klim4ntovich/catnip/general  
+Манифест: my-pod.yaml (Добавил readiness- & liviness- probes, проверка доступности порта приложения (5000) и самого веб-приложения)  
+```
+vklimantovich@nt-admins-MacBook-Pro 2_6 % kubectl create -f my-pod.yaml 
+pod/web-app created
+vklimantovich@nt-admins-MacBook-Pro 2_6 % kubectl get po
+NAME      READY   STATUS              RESTARTS   AGE
+web-app   0/1     ContainerCreating   0          5s
+vklimantovich@nt-admins-MacBook-Pro 2_6 % kubectl get po
+NAME      READY   STATUS    RESTARTS   AGE
+web-app   1/1     Running   0          98s
+```
