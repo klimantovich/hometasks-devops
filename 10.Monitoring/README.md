@@ -55,5 +55,35 @@ Grafana:
 - Pods Running //метрика: sum(kube_pod_status_phase{phase="Running"})
 - Pods Failed //метрика: sum(kube_pod_status_phase{phase="Failed"})
 - Pods Restarts //метрика: increase(kube_pod_container_status_restarts_total[5m])
+<img width="1189" alt="Снимок экрана 2023-11-08 в 11 29 54" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/98b58cd0-d3ad-4344-903f-c95c5d3212cf">
+
+# Создание Алертов в Prometheus и Интеграция с Grafana
+Создал алерт, который срабатывает, когда какой-либо под перезагружается, и добавил его в values.yaml файл helm-чарта:  
+Обновил: `helm upgrade -f ./prometheus-values.yaml prometheus prometheus-community/prometheus`  
+```
+serverFiles:
+  ## Alerts configuration
+  ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+  alerting_rules.yml:
+    groups:
+      - name: PodAlerts
+        rules:
+          - alert: PodRestarted
+            expr: "increase(kube_pod_container_status_restarts_total[5m]) > 0"
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              description: "Pod {{ $labels.pod }} on namespace {{ $labels.namespace }} has been restarted."
+              summary: "Pod {{ $labels.pod }} restarted"
+  ## DEPRECATED DEFAULT VALUE, unless explicitly naming your files, please use alerting_rules.yml
+  alerts: {}
+```
+<img width="1498" alt="Снимок экрана 2023-11-08 в 11 46 33" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/e29497e9-1eee-4406-8250-74afdd5b18e8">  
+Создал панель в grafana с алертом (предварительно специально поставил условие чтоб алерт сработал):  
+<img width="867" alt="Снимок экрана 2023-11-08 в 11 51 25" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/d7d4d50c-9422-48ee-aa49-f8c5ad8b8f74">  
+
+# Масштабирование Minikube и Мониторинг с Prometheus
+
 
   
