@@ -85,5 +85,24 @@ serverFiles:
 
 # Масштабирование Minikube и Мониторинг с Prometheus
 
+Увеличил к-во реплик prometheus-pushgateway с 1 до 2х:  
+`kubectl edit deployments.apps prometheus-prometheus-pushgateway` -> выставил значение replicas: 2  
+```
+vklimantovich@nt-admins-MacBook-Pro 10.Monitoring % kubectl get rs                                 
+NAME                                           DESIRED   CURRENT   READY   AGE
+grafana-75dd9f5d89                             1         1         1       153m
+prometheus-kube-state-metrics-56f5765bcf       1         1         1       156m
+prometheus-prometheus-pushgateway-5b7b9f67bb   2         2         2       156m
+prometheus-server-7bbd49dd                     1         1         1       156m
+vklimantovich@nt-admins-MacBook-Pro 10.Monitoring % kubectl get po
+NAME                                                 READY   STATUS    RESTARTS   AGE
+grafana-75dd9f5d89-h9kjc                             1/1     Running   0          153m
+prometheus-alertmanager-0                            1/1     Running   0          156m
+prometheus-kube-state-metrics-56f5765bcf-qlw77       1/1     Running   0          156m
+prometheus-prometheus-node-exporter-p4bzr            1/1     Running   0          156m
+prometheus-prometheus-pushgateway-5b7b9f67bb-7mlx9   1/1     Running   0          156m
+prometheus-prometheus-pushgateway-5b7b9f67bb-gn96w   1/1     Running   0          14m
+prometheus-server-7bbd49dd-7jpwt                     2/2     Running   0          156m
+```
+<img width="241" alt="Снимок экрана 2023-11-08 в 12 08 57" src="https://github.com/klimantovich/hometasks-devops/assets/91698270/b5ec2465-61ac-49f2-a990-05cbe5002b8f">
 
-  
